@@ -45,11 +45,7 @@ function DoctorSidebar() {
       path: "/doctor/history",
       icon: <History size={20} />,
     },
-    {
-      title: "Professional Profile",
-      path: "/doctor/profile",
-      icon: <UserSquare2 size={20} />,
-    },
+  
     {
       title: "Clinic Settings",
       path: "/doctor/settings",
@@ -65,7 +61,7 @@ function DoctorSidebar() {
             Clinical Operations
           </p>
           
-          <nav className="space-y-1">
+          <nav className="space-y-5">
             {menuItems.map((item, index) => {
               const isActive = currentPath === item.path;
               

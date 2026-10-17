@@ -68,6 +68,18 @@ export default function Register() {
     }
   };
 
+  const resendOtp = async () => {
+    try {
+      const res = await axios.post(
+        "http://localhost:8081/otp/resend-otp",
+        { email: form.email }
+      );
+      toast.success(res.data);
+    } catch (error) {
+      toast.error("Failed to resend OTP");
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-tr from-indigo-900 via-slate-900 to-blue-900 flex justify-center items-center p-4">
       <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob"></div>
@@ -144,7 +156,7 @@ export default function Register() {
                   <option value="no role">Select Your Role</option>
                   <option value="PATIENT">Patient</option>
                   <option value="DOCTOR">Doctor</option>
-                  <option value="ADMIN">Admin</option>
+                  <option value="ADMIN" disabled>Admin</option>
                 </select>
               </div>
 
@@ -185,8 +197,16 @@ export default function Register() {
                 Verify Code
               </button>
             </form>
+            <button
+              onClick={() => resendOtp()}
+              className="w-full mt-4 bg-gradient-to-r from-gray-500 to-gray-600 hover:from-gray-600 hover:to-gray-700 text-white p-3.5 rounded-xl font-bold shadow-lg transition transform hover:-translate-y-0.5"
+            >
+              Resend Code
+            </button>
           </>
         )}
+
+       
 
         <p className="text-center text-slate-400 text-sm mt-8">
           Already have an account?{" "}
@@ -200,5 +220,6 @@ export default function Register() {
 
       </div>
     </div>
-  );
-}
+  )
+};
+

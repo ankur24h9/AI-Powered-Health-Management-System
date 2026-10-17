@@ -21,13 +21,13 @@ public class MedicineController {
         this.medicineService = medicineService;
     }
 
-    @PostMapping
+    @PostMapping("/create-Med")
     public Medicine createMedicine(
             @RequestBody Medicine medicine) {
         return medicineService.saveMedicine(medicine);
     }
 
-    @GetMapping
+    @GetMapping("/get_all_med")
     public List<Medicine> getAllMedicines() {
         return medicineService.getAllMedicines();
     }

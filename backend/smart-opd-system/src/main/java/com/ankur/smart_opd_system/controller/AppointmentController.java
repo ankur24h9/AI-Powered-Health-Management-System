@@ -1,12 +1,12 @@
 package com.ankur.smart_opd_system.controller;
 
+import com.ankur.smart_opd_system.dto.AppointmentDTO;
 import com.ankur.smart_opd_system.entity.Appointment;
 import com.ankur.smart_opd_system.service.AppointmentService;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -50,7 +50,8 @@ public List<Appointment> getDoctorAppointments(Authentication authentication) {
 
     @GetMapping
     public List<Appointment> getAllAppointments() {
-        return appointmentService.getAllAppointments();
+
+    return appointmentService.getAllAppointments();
     }
 
     @GetMapping("/{id}")
@@ -58,6 +59,16 @@ public List<Appointment> getDoctorAppointments(Authentication authentication) {
             @PathVariable Long id) {
 
         return appointmentService.getAppointmentById(id);
+    }
+
+    @PutMapping("/{id}/call")
+    public ResponseEntity<Appointment> callNextAppointmentById(
+            @PathVariable Long id) {
+
+        Appointment appointment =
+                appointmentService.callNextAppointmentById(id);
+
+        return ResponseEntity.ok(appointment);
     }
 
     @DeleteMapping("/{id}")

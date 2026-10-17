@@ -57,7 +57,6 @@ function Login() {
   const handleForgotPassword = async (e) => {
     e.preventDefault();
     try {
-      // Replace with your actual backend endpoint for handling password resets
       await axios.post("http://localhost:8081/auth/forgot-password", {
         email: forgotEmail,
       });
@@ -125,7 +124,7 @@ function Login() {
                 >
                   <option value="PATIENT">Patient</option>
                   <option value="DOCTOR">Doctor</option>
-                  <option value="ADMIN">Admin</option>
+                  <option value="ADMIN" disabled>Admin</option>
                 </select>
               </div>
 
@@ -157,7 +156,7 @@ function Login() {
             </p>
           </>
         ) : (
-          /* FORGOT PASSWORD VIEW */
+
           <>
             <h3 className="text-3xl font-extrabold text-center mb-2 bg-gradient-to-r from-blue-400 to-indigo-200 bg-clip-text text-transparent">
               Reset Password

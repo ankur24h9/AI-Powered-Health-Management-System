@@ -23,13 +23,13 @@ function Sidebar() {
         </li>
 
         <li>
-          <Link to="/doctors">
+          <Link to="/All doctors">
             Doctors
           </Link>
         </li>
 
         <li>
-          <Link to="/appointments">
+          <Link to="/doctor/history">
             Appointments
           </Link>
         </li>

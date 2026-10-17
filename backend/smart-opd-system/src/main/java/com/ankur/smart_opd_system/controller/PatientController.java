@@ -1,13 +1,10 @@
 package com.ankur.smart_opd_system.controller;
-
 import com.ankur.smart_opd_system.entity.Patient;
 import com.ankur.smart_opd_system.service.PatientService;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/patients")
@@ -24,25 +21,45 @@ public class PatientController {
         return patientService.savePatient(patient);
     }
 
-    @GetMapping
-    public List<Patient> getAllPatients() {
+    @GetMapping("/getAll")
+    public ResponseEntity<List<Patient>>getAllPatients() {
 
-        return patientService.getAllPatients();
+        List<Patient> list=patientService.getAllPatients();
+        if(list.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok().body(list);
+    }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<Patient> updatePatient(@PathVariable Long id, @RequestBody Patient patientReq){
+
+        Patient patientResp = patientService.updatePatient(id,patientReq);
+        if(patientResp==null){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(patientResp);
     }
 
     @GetMapping("/{id}")
-    public Optional<Patient> getPatientById(
+    public ResponseEntity<Patient> getPatientById(
             @PathVariable Long id) {
+        Patient patientRes = patientService.getPatientById(id);
 
-        return patientService.getPatientById(id);
+        return ResponseEntity.notFound().build();
     }
+
 
     @DeleteMapping("/{id}")
-    public String deletePatient(
-            @PathVariable Long id) {
+    public ResponseEntity<String> deletePatient(@PathVariable Long id) {
 
-        patientService.deletePatient(id);
+        boolean deleted = patientService.deletePatient(id);
 
-        return "Patient Deleted Successfully";
+        if (!deleted) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok("Patient deactivated successfully");
     }
+
 }

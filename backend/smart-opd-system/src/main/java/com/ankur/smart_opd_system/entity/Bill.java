@@ -22,11 +22,11 @@ public class Bill {
 
     private String paymentStatus;
 
-    // Default Constructor
+
     public Bill() {
     }
 
-    // Parameterized Constructor
+
     public Bill(Long id, String patientName,
                 Double consultationFee,
                 Double medicineCharge,

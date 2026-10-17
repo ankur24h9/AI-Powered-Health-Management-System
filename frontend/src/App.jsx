@@ -1,5 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import MedicalHistory from "./pages/MedicalHistory";
+import AppointmentHistory from "./pages/AppointmentHistory";
 import Login from "./pages/Login";
 import WritePrescription from "./pages/WritePrescription";
 import AdminDashboard from "./pages/AdminDashboard";
@@ -21,6 +22,8 @@ import MyReport from "./pages/MyReport";
 import PatientSetting from "./pages/PatientSetting";
 import LiveQueue from "./pages/LiveQueue";
 import PatientsDirectory from "./pages/PatientDirectory";
+import UploadMedicalCertificate from "./pages/UploadMedicalCertificate";
+import ClinicSetting from "./pages/ClinicSetting";
 function App() {
   return (
     <Routes>
@@ -40,6 +43,17 @@ function App() {
   path="/doctor/live-queue"
   element={<LiveQueue />}
 />
+
+<Route
+path="/doctor/settings"
+element={<ClinicSetting />}
+/>
+
+<Route
+        path="/doctor/history"
+        element={<AppointmentHistory />}
+      />
+
       <Route
         path="/my-reports"
         element={<MyReport />}
@@ -53,8 +67,11 @@ function App() {
         path="/reset-password"
         element={<ResetPassword />}
       />
-
-     
+      
+      <Route 
+      path="/doctor/certificates"
+      element={<UploadMedicalCertificate />}
+      />    
 
       <Route
         path="/login"

@@ -19,13 +19,15 @@ public class BillController {
         this.billService = billService;
     }
 
-    @PostMapping
+    @PostMapping("/create-bill")
     public Bill createBill(@RequestBody Bill bill) {
+
         return billService.saveBill(bill);
     }
 
-    @GetMapping
+    @GetMapping("/get_all_bills")
     public List<Bill> getAllBills() {
+
         return billService.getAllBills();
     }
 

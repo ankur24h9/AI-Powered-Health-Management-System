@@ -2,7 +2,8 @@ import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-
+import { useState } from "react";
+import { toast } from "react-toastify";
 import {
   Bell,
   Search,
@@ -11,10 +12,12 @@ import {
 } from "lucide-react";
 
 function Navbar() {
+
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
+  const [showNotifications, setShowNotifications] = useState(false);
 
-
+const notifications = [];
 
   return (
     <header className="sticky top-0 z-50 backdrop-blur-xl bg-white/80 border-b border-gray-200 shadow-sm">
@@ -61,13 +64,66 @@ function Navbar() {
 
 
 
-          <button className="relative bg-gray-100 hover:bg-blue-100 p-3 rounded-xl transition">
+         <div className="relative">
 
-            <Bell size={22} />
+  <button
+    onClick={() =>
+      setShowNotifications(!showNotifications)
+    }
+    className="relative bg-gray-100 hover:bg-blue-100 p-3 rounded-xl transition"
+  >
+    <Bell size={22} />
 
-            <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-red-500"></span>
+    {notifications.length > 0 && (
+      <span className="absolute top-2 right-2 w-2.5 h-2.5 rounded-full bg-red-500"></span>
+    )}
+  </button>
 
-          </button>
+  {showNotifications && (
+    <div className="absolute right-0 mt-1 w-80 bg-gray-100 rounded-2xl shadow-xl border z-50 p-2">
+
+      {notifications.length === 0 ? (
+        <div className="text-center py-2">
+          <Bell
+            size={30}
+            className="mx-auto text-yellow-400"
+          />
+
+          <p className="font-semibold text-gray-700 mt-2">
+            No New Notifications
+          </p>
+
+          <p className="text-sm text-gray-400 mt-1">
+            You're all caught up!
+          </p>
+        </div>
+      ) : (
+        <div>
+          <h3 className="font-bold text-gray-900 mb-4">
+            Notifications
+          </h3>
+
+          {notifications.map((notification) => (
+            <div
+              key={notification.id}
+              className="p-3 border-b"
+            >
+              <p className="font-semibold">
+                {notification.title}
+              </p>
+
+              <p className="text-sm text-gray-500">
+                {notification.message}
+              </p>
+            </div>
+          ))}
+        </div>
+      )}
+
+    </div>
+  )}
+
+</div>
 
           
 
@@ -87,7 +143,7 @@ function Navbar() {
             <div className="hidden md:block">
 
               <p className="text-xs text-gray-500">
-                Welcome Back
+                Welcome 
               </p>
 
               <h3 className="font-semibold text-gray-800">

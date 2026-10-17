@@ -42,7 +42,7 @@ function BookAppointment() {
     try {
       setDoctorsLoading(true);
 
-      const res = await api.get("/doctors");
+      const res = await api.get("/doctors/getAllDoc");
 
       setDoctors(res.data);
     } catch (error) {
@@ -130,9 +130,6 @@ function BookAppointment() {
   return (
     <div className="min-h-screen bg-slate-50">
 
-      {/* =====================================================
-          TOP HEADER
-      ====================================================== */}
 
       <div className="bg-white border-b border-slate-200">
 
@@ -153,19 +150,15 @@ function BookAppointment() {
 
       </div>
 
-      {/* =====================================================
-          MAIN CONTAINER
-      ====================================================== */}
+
 
       <main className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
 
-        {/* =====================================================
-            HERO
-        ====================================================== */}
+
 
         <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-blue-600 via-indigo-600 to-violet-700 text-white shadow-xl mb-8">
 
-          {/* Decorative circles */}
+
 
           <div className="absolute -right-16 -top-20 w-64 h-64 rounded-full bg-white/10" />
 
@@ -264,9 +257,6 @@ function BookAppointment() {
               className="p-6 space-y-6"
             >
 
-              {/* =================================================
-                  PATIENT INFORMATION
-              ================================================== */}
 
               <div>
 

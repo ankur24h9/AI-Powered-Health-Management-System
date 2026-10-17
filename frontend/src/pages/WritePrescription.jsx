@@ -15,6 +15,7 @@ import {
 const WritePrescription = () => {
 
   const [formData, setFormData] = useState({
+    patientId: "",
     patientName: "",
     doctorName: "",
     diagnosis: "",
@@ -24,6 +25,10 @@ const WritePrescription = () => {
 
   const [loading, setLoading] = useState(false);
 
+  // Patients who have booked appointment with logged-in doctor
+  const [patients, setPatients] = useState([]);
+  const [patientsLoading, setPatientsLoading] = useState(false);
+
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -31,25 +36,143 @@ const WritePrescription = () => {
     });
   };
 
+  // Fetch patients of logged-in doctor
+  const fetchDoctorPatients = async () => {
+
+    // Don't call API again if patients are already loaded
+    if (patients.length > 0) {
+      return;
+    }
+
+    try {
+
+      setPatientsLoading(true);
+
+      const token = localStorage.getItem("token");
+
+      const response = await axios.get(
+        "http://localhost:8081/api/appointments/doctor",
+        {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        }
+      );
+
+      console.log("Doctor appointments:", response.data);
+
+      const uniquePatients = [];
+
+      response.data.forEach((appointment) => {
+
+        // Appointment contains patient
+        if (appointment.patient) {
+
+          const patient = appointment.patient;
+
+          // Create patient full name
+          const fullName = [
+            patient.firstName,
+            patient.lastName
+          ]
+            .filter(Boolean)
+            .join(" ");
+
+          // Check duplicate patient
+          const alreadyExists = uniquePatients.some(
+            (p) => p.patientId === patient.patientId
+          );
+
+          if (!alreadyExists) {
+
+            uniquePatients.push({
+              patientId: patient.patientId,
+              name: fullName,
+            });
+
+          }
+        }
+
+      });
+
+      console.log(
+        "Patients of logged-in doctor:",
+        uniquePatients
+      );
+
+      setPatients(uniquePatients);
+
+    } catch (err) {
+
+      console.log("Error fetching doctor patients:", err);
+
+      if (err.response) {
+        console.log("Status:", err.response.status);
+        console.log("Response:", err.response.data);
+      }
+
+      toast.error("Failed to load patients.");
+
+    } finally {
+
+      setPatientsLoading(false);
+
+    }
+  };
+
   const handleClear = () => {
+
     setFormData({
+      patientId: "",
       patientName: "",
       doctorName: "",
       diagnosis: "",
       medicines: "",
       notes: "",
     });
+
   };
 
   const handleSubmit = async (e) => {
+
     e.preventDefault();
 
     try {
+
       setLoading(true);
 
+      // Find selected patient
+      const selectedPatient = patients.find(
+        (patient) =>
+          patient.patientId === Number(formData.patientId)
+      );
+
+      if (!selectedPatient) {
+        toast.error("Please select a valid patient.");
+        setLoading(false);
+        return;
+      }
+
+      // Data sent to Spring Boot
+      const prescriptionData = {
+        patient: {
+          patientId: selectedPatient.patientId,
+        },
+        patientName: selectedPatient.name,
+        doctorName: formData.doctorName,
+        diagnosis: formData.diagnosis,
+        medicines: formData.medicines,
+        notes: formData.notes,
+      };
+
+      console.log(
+        "Prescription data being sent:",
+        prescriptionData
+      );
+
       await axios.post(
-        "http://localhost:8081/api/prescriptions",
-        formData,
+        "http://localhost:8081/api/prescriptions/create_prescription",
+        prescriptionData,
         {
           headers: {
             Authorization:
@@ -59,12 +182,24 @@ const WritePrescription = () => {
       );
 
       toast.success("Prescription Saved Successfully");
+
       handleClear();
+
     } catch (err) {
-      console.log(err);
+
+      console.log("Prescription save error:", err);
+
+      if (err.response) {
+        console.log("Status:", err.response.status);
+        console.log("Response:", err.response.data);
+      }
+
       toast.error("Failed to save prescription.");
+
     } finally {
+
       setLoading(false);
+
     }
   };
 
@@ -72,8 +207,6 @@ const WritePrescription = () => {
     <div className="min-h-screen bg-slate-100 py-10 px-5">
 
       <div className="max-w-5xl mx-auto bg-white rounded-2xl shadow-2xl overflow-hidden">
-
-        {/* Header */}
 
         <div className="bg-gradient-to-r from-blue-700 to-cyan-600 text-white p-8">
 
@@ -92,9 +225,9 @@ const WritePrescription = () => {
           className="p-8 space-y-8"
         >
 
-          {/* Patient Doctor */}
-
           <div className="grid md:grid-cols-2 gap-6">
+
+            {/* Patient Name */}
 
             <div>
 
@@ -103,17 +236,53 @@ const WritePrescription = () => {
                 Patient Name
               </label>
 
-              <input
-                type="text"
-                name="patientName"
-                value={formData.patientName}
-                onChange={handleChange}
+              <select
+                name="patientId"
+                value={formData.patientId}
+                onChange={(e) => {
+
+                  const selectedPatient = patients.find(
+                    (patient) =>
+                      patient.patientId === Number(e.target.value)
+                  );
+
+                  setFormData({
+                    ...formData,
+                    patientId: e.target.value,
+                    patientName: selectedPatient
+                      ? selectedPatient.name
+                      : "",
+                  });
+
+                }}
+                onFocus={fetchDoctorPatients}
                 required
-                placeholder="Enter Patient Name"
-                className="w-full border rounded-xl p-3 focus:ring-2 focus:ring-blue-500 outline-none"
-              />
+                className="w-full border rounded-xl p-3 focus:ring-2 focus:ring-blue-500 outline-none bg-white"
+              >
+
+                <option value="">
+                  {patientsLoading
+                    ? "Loading patients..."
+                    : "Select Patient"}
+                </option>
+
+                {patients.map((patient) => (
+
+                  <option
+                    key={patient.patientId}
+                    value={patient.patientId}
+                  >
+                    {patient.name}
+                  </option>
+
+                ))}
+
+              </select>
 
             </div>
+
+
+            {/* Doctor Name */}
 
             <div>
 
@@ -135,6 +304,7 @@ const WritePrescription = () => {
             </div>
 
           </div>
+
 
           {/* Diagnosis */}
 
@@ -159,6 +329,7 @@ const WritePrescription = () => {
             />
 
           </div>
+
 
           {/* Medicines */}
 
@@ -192,6 +363,7 @@ Before Breakfast`}
 
           </div>
 
+
           {/* Notes */}
 
           <div>
@@ -214,6 +386,7 @@ Before Breakfast`}
             />
 
           </div>
+
 
           {/* Buttons */}
 
@@ -239,7 +412,9 @@ Before Breakfast`}
 
               <Save size={18} />
 
-              {loading ? "Saving..." : "Save Prescription"}
+              {loading
+                ? "Saving..."
+                : "Save Prescription"}
 
             </button>
 

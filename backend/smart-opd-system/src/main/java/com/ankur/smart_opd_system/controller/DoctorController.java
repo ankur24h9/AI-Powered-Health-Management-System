@@ -16,14 +16,13 @@ public class DoctorController {
     @Autowired
     private DoctorService doctorService;
 
-    @PostMapping
+    @PostMapping("/create-doctor")
     public Doctor createDoctor(
             @RequestBody Doctor doctor) {
- System.out.println("===== createDoctor() called =====");
         return doctorService.saveDoctor(doctor);
     }
 
-    @GetMapping
+    @GetMapping("/getAllDoc")
     public List<Doctor> getAllDoctors() {
 
         return doctorService.getAllDoctors();

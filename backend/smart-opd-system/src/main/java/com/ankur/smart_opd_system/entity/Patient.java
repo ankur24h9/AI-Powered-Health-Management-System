@@ -22,6 +22,9 @@ public class Patient {
     @Column(name = "patient_id")
     private Long patientId;
 
+    @Column(nullable = false)
+    private boolean active = true;
+
     @Column(name = "patient_code")
     private String patientCode;
 
@@ -41,6 +44,7 @@ public class Patient {
 
     private String phone;
 
+    @Column(nullable = false, unique = true)
     private String email;
 
     private String address;
@@ -137,5 +141,13 @@ public class Patient {
 
     public void setEmergencyContact(String emergencyContact) {
         this.emergencyContact = emergencyContact;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

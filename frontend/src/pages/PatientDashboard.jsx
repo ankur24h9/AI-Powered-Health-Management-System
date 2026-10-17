@@ -56,7 +56,7 @@ export default function PatientDashboard() {
               >
 
               <h1 className="text-5xl font-bold">
-                Welcome {user?.username}
+                Welcome {user?.name || "Guest"}
               </h1>
 
               <p className="mt-5 text-lg text-blue-100 max-w-4xl">

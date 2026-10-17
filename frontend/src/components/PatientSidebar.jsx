@@ -70,7 +70,7 @@ export default function PatientSidebar() {
         )}
       </AnimatePresence>
 
-      {/* Sidebar */}
+
       <motion.aside
         initial={false}
         animate={{
@@ -93,7 +93,7 @@ export default function PatientSidebar() {
           </button>
         </div>
 
-        <div className="mt-6 px-4 space-y-3">
+        <div className="mt-6 px-4 space-y-5">
           {menu.map((item) => {
             const Icon = item.icon;
 

@@ -1,14 +1,14 @@
 package com.ankur.smart_opd_system.service;
 
+import com.ankur.smart_opd_system.dto.AppointmentDTO;
 import com.ankur.smart_opd_system.entity.Appointment;
 import com.ankur.smart_opd_system.entity.AppointmentStatus;
 import com.ankur.smart_opd_system.entity.Doctor;
 import com.ankur.smart_opd_system.repository.AppointmentRepository;
 import com.ankur.smart_opd_system.repository.DoctorRepository;
-
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -87,5 +87,19 @@ public class AppointmentService {
     public void deleteAppointment(Long id) {
 
         appointmentRepository.deleteById(id);
+    }
+
+    @Transactional
+    public Appointment callNextAppointmentById(Long id) {
+
+        Appointment appointment = appointmentRepository
+                .findById(id)
+                .orElseThrow(() ->
+                        new RuntimeException(
+                                "Appointment not found with ID: " + id));
+
+        throw new RuntimeException(
+                "Only WAITING appointments can be called.");
+
     }
 }

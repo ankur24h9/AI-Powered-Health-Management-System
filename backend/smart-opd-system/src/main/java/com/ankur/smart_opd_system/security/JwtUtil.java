@@ -34,7 +34,7 @@ public class JwtUtil {
         return Jwts.parser()
                 .verifyWith((javax.crypto.SecretKey) KEY)
                 .build()
-                .parseSignedClaims(token)
+                     .parseSignedClaims(token)
                 .getPayload()
                 .getSubject();
     }

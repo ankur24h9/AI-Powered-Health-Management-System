@@ -66,7 +66,7 @@ export default function LandingPage() {
             <div>
 
               <h1 className="font-bold text-xl">
-                Smart OPD
+               AI Powered Smart OPD System
               </h1>
 
               <p className="text-xs text-slate-400">
@@ -180,15 +180,15 @@ export default function LandingPage() {
 
             <h1 className="text-6xl font-black leading-tight">
 
-              Smart
+             A.I Powered Smart 
 
               <span className="text-blue-500">
-                {" "}OPD
+                {"       "}OPD {"  "}
               </span>
 
-              <br />
+            
 
-              Hospital Management
+             Management System
 
             </h1>
 

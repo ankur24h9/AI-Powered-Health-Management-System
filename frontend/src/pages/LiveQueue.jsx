@@ -97,30 +97,32 @@ function LiveQueue() {
 
   
 
-  const updateStatus = async (appointmentId, status) => {
-    try {
-      setActionLoading(`${appointmentId}-${status}`);
-      setError("");
+const updateStatus = async (appointmentId, status) => {
+  try {
+    setActionLoading(`${appointmentId}-${status}`);
+    setError("");
 
-      await api.put(
-        `/appointments/${appointmentId}/status`,
-        {
-          status,
-        }
-      );
+    await api.put(`/appointments/${appointmentId}/call`, {
+      status: status,
+    });
 
-      await fetchQueue(true);
-    } catch (err) {
-      console.error("Status update error:", err);
+    await fetchQueue(true);
+  } catch (err) {
+    console.error(
+      "Status update error:",
+      err.response?.data || err
+    );
 
-      setError(
-        err.response?.data?.message ||
-          "Unable to update appointment status."
-      );
-    } finally {
-      setActionLoading(null);
-    }
-  };
+    setError(
+      err.response?.data?.message ||
+        err.response?.data?.error ||
+        "Unable to update appointment status."
+    );
+  } finally {
+    setActionLoading(null);
+  }
+};
+
 
  
   const sortedAppointments = useMemo(() => {

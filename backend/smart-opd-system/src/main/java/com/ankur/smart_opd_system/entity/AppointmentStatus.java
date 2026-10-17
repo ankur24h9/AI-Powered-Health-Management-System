@@ -4,6 +4,10 @@ public enum AppointmentStatus {
     PENDING,
     CONSULTING,
     COMPLETED,
-    CANCELLED
-    
+    CANCELLED;
+
+    public static String getStatus(String consulting) {
+
+        return consulting;
+    }
 }
